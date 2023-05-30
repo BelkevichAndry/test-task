@@ -1,0 +1,53 @@
+version: '3'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+    depends_on:
+      - postgres
+      - clickhouse
+      - kafka
+    volumes:
+      - ./src:/app/src  
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: mysecretpassword
+      POSTGRES_DB: mydatabase
+    ports:
+      - '5432:5432'
+    volumes: 
+          - ./src/scripts/pg_init.sql:/docker-entrypoint-initdb.d/init.sql
+  clickhouse:
+    image: yandex/clickhouse-server
+    environment:
+      - CLICKHOUSE_INIT_TIMEOUT=60
+    ports:
+      - '8123:8123'
+      - '9000:9000'
+    volumes:
+      - ./src/scripts/clickhouse_init.sql:/docker-entrypoint-initdb.d/init.sql
+  kafka:
+    image: wurstmeister/kafka:latest
+    ports:
+      - '9092:9092'
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: kafka
+      KAFKA_CREATE_TOPICS: "trackerExists:1:1"
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+    restart: always  
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  zookeeper:
+    image: wurstmeister/zookeeper:latest
+    ports:
+      - '2181:2181'            
+    tmpfs: "/datalog"  

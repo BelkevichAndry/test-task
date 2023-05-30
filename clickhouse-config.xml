@@ -1,0 +1,67 @@
+<yandex>
+	<clickhouse_server>
+		<!-- Network settings -->
+		<listen_host>
+			::
+		</listen_host>
+		<listen_host>
+			0.0.0.0
+		</listen_host>
+		<listen_try>
+			3
+		</listen_try>
+		<tcp_port>
+			9000
+		</tcp_port>
+		<http_port>
+			8123
+		</http_port>
+		<!-- Data storage settings -->
+		<path>
+			/var/lib/clickhouse/
+		</path>
+		<user_files_path>
+			/var/lib/clickhouse/user_files/
+		</user_files_path>
+		<tmp_path>
+			/var/lib/clickhouse/tmp/
+		</tmp_path>
+		<format_schema_path>
+			/etc/clickhouse-server/format_schemas/
+		</format_schema_path>
+		<!-- Query execution settings -->
+		<max_connections>
+			1000
+		</max_connections>
+		<keep_alive_timeout>
+			5
+		</keep_alive_timeout>
+		<receive_timeout>
+			300
+		</receive_timeout>
+		<send_timeout>
+			300
+		</send_timeout>
+		<max_query_size>
+			262144
+		</max_query_size>
+		<max_insert_block_size>
+			1048576
+		</max_insert_block_size>
+		<!-- Logging settings -->
+		<logger>
+			<log>
+				/var/log/clickhouse-server/clickhouse-server.log
+			</log>
+			<errorlog>
+				/var/log/clickhouse-server/clickhouse-server.err.log
+			</errorlog>
+			<size>
+				100M
+			</size>
+			<count>
+				10
+			</count>
+		</logger>
+	</clickhouse_server>
+</yandex>
